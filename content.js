@@ -18,12 +18,12 @@
     notifyBeforeClass: false,
     notifyMinutes: 10,
     colors: {
-      upcoming: { text: "#b71c1c", bg: "#ffcdd2" },
-      ongoing: { text: "#1b5e20", bg: "#c8e6c9" },
-      ended: { text: "#e65100", bg: "#ffe0b2" },
+      upcoming: { textColor: "#b71c1c", bg: "#ffcdd2" },
+      ongoing: { textColor: "#1b5e20", bg: "#c8e6c9" },
+      ended: { textColor: "#e65100", bg: "#ffe0b2" },
       banner: {
-        upcoming: { text: "#856404", bg: "#fff3cd", border: "#856404" },
-        none: { text: "#155724", bg: "#d4edda", border: "#155724" },
+        upcoming: { textColor: "#856404", bg: "#fff3cd", border: "#856404" },
+        none: { textColor: "#155724", bg: "#d4edda", border: "#155724" },
       },
     },
   };
@@ -427,7 +427,8 @@
         return {
           type: "upcoming",
           text: `Starts in ${utils.formatDuration(startDate - now)}`,
-          ...colors.upcoming,
+          textColor: colors.upcoming.textColor,
+          bg: colors.upcoming.bg,
         };
       } else if (now <= endDate) {
         return {
@@ -435,13 +436,15 @@
           text: `In Progress • ${utils.formatDuration(
             endDate - now
           )} remaining`,
-          ...colors.ongoing,
+          textColor: colors.ongoing.textColor,
+          bg: colors.ongoing.bg,
         };
       } else {
         return {
           type: "ended",
           text: `Ended ${utils.formatDuration(now - endDate)} ago`,
-          ...colors.ended,
+          textColor: colors.ended.textColor,
+          bg: colors.ended.bg,
         };
       }
     },
@@ -473,7 +476,7 @@
 
       // Add status label if enabled
       if (state.settings.showInlineStatus) {
-        const statusLabel = ui.createStatusLabel(status.text, status.text);
+        const statusLabel = ui.createStatusLabel(status.text, status.textColor);
         cells[2].appendChild(statusLabel);
       }
 
@@ -542,8 +545,8 @@
           nextClass.startDate - new Date()
         );
         banner.innerHTML = `
-          <span style="font-size: 18px;">📌</span> 
-          <strong>Next:</strong> ${nextClass.course} 
+          <span style="font-size: 18px;">📌</span>
+          <strong>Next:</strong> ${nextClass.course}
           <span style="opacity: 0.8;">in ${timeUntil}</span>
           ${
             nextClass.location
@@ -553,7 +556,7 @@
         `;
         Object.assign(banner.style, {
           backgroundColor: colors.upcoming.bg,
-          color: colors.upcoming.text,
+          color: colors.upcoming.textColor,
           borderColor: colors.upcoming.border,
         });
       } else {
@@ -561,7 +564,7 @@
           '<span style="font-size: 18px;">✅</span> <strong>All done for today!</strong>';
         Object.assign(banner.style, {
           backgroundColor: colors.none.bg,
-          color: colors.none.text,
+          color: colors.none.textColor,
           borderColor: colors.none.border,
         });
       }
